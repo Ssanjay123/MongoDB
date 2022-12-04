@@ -12,6 +12,7 @@ exports.getAddProduct = (req, res, next) => {
 
   exports.postAddProduct =  (req, res, next) => {
     products.push({ title: req.body.title });
+    console.log(req.body.title);
     res.redirect('/');
   }
 
@@ -26,6 +27,4 @@ exports.getAddProduct = (req, res, next) => {
     });
   }
 
-  exports.giveError = (req, res, next) => {
-    res.status(404).render('404', { pageTitle: 'Page Not Found' });
-  }
+  

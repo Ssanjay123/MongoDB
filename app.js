@@ -3,21 +3,45 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const errorController = require('./controllers/error');
+
+// const mongoConnect = require("./util/database").mongoConnect;
+const mongoose = require("./util/database")
+const Product = require("./models/product");
+
+
 const app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-const adminRoute = require('./routes/admin');
+const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
-const errorRoutes = require('./controllers/products');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/admin',adminRoute);
+app.use((req, res, next) => {
+  // User.findById(1)
+  //   .then(user => {
+  //     req.user = user;
+  //     next();
+  //   })
+  //   .catch(err => console.log(err));
+  next();
+});
+
+app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
-app.use(errorRoutes.giveError);
+app.use(errorController.get404);
 
-app.listen(3000);
+// mongoConnect(client=>{
+//   // console.log(client);
+//     app.listen(3000)
+//     console.log("server is running")
+// })
+
+app.listen(3000,()=>{
+  console.log("server is running")
+})
